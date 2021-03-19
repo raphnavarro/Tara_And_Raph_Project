@@ -1,1 +1,3 @@
-# Tara_And_Raph_Project
+# EE355: Software Design for Electrical Engineers
+## Project - Phase 1
+Instructions are available on the BlackBoard
