@@ -27,19 +27,55 @@ Date::Date(string str){
 
 bool Date::operator==(const Date& rhs){
     // TODO
+    cout << this->month <<  "-- "<< rhs.month << endl;
+    if(this->month == rhs.month){
+      cout << this->day <<  "-- "<< rhs.day << endl;
+      if(this->day == rhs.day){
+        if(this->year == rhs.year)
+          return true;
+      }
+    }
+    return false;
 }
 
 
 bool Date::operator!=(const Date& rhs){
     // TODO
+    if(this->month == rhs.month){
+      if(this->day == rhs.day){
+        if(this->year == rhs.year)
+          return false;
+      }
+    }
+    return true;
 }
 
 bool Date::operator < (const Date& rhs){
     // TODO
+    if(this->year < rhs.year)
+      return true;
+    else if(this->year == rhs.year){
+      if(this->month < rhs.year)
+        return true;
+    }else if(this->month == rhs.month){
+      if(this->day < rhs.day)
+        return true;
+    }
+    return false;
 }
 
 bool Date::operator > (const Date& rhs){
     // TODO
+    if(this->year > rhs.year)
+      return true;
+    else if(this->year == rhs.year){
+      if(this->month > rhs.year)
+        return true;
+    }else if(this->month == rhs.month){
+      if(this->day > rhs.day)
+        return true;
+    }
+    return false;
 }
 
 bool Date::check_date(int _day, int _month, int _year){
