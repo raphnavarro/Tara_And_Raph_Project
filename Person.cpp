@@ -10,22 +10,20 @@ Person::Person(){
 
 Person::Person(string fname, string lname, string bdate){
     // TODO
-    //@raph I did this
-    f_name = fname;
-    l_name = lname;
-    Date dat(bdate);
-    birthdate = &dat;
+    this->f_name = fname;
+    this->l_name = lname;
+    this->birthdate = new Date(bdate);
 }
 
 
 Person::~Person(){
+  delete birthdate;
     // TODO
 }
 
 
 void Person::set_person(){
     //TODO
-    //@raph I did this except the last todo w/ dynamic allocation
     // prompts for the information of the user
     // first/last name can have spaces!
     // date format must be "M/D/YYYY", but user can make mistakes
@@ -40,8 +38,7 @@ void Person::set_person(){
     cout << "Birthdate (M/D/YYYY): ";
     string s;
     cin >> s;
-    Date dat(s);
-    birthdate = &dat;
+    birthdate = new Date(s);
     // TODO: get birthdate from user as a string and use it to create a new Date (dynamic allocation)
 
 }
