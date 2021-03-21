@@ -27,9 +27,7 @@ Date::Date(string str){
 
 bool Date::operator==(const Date& rhs){
     // TODO
-    cout << this->month <<  "-- "<< rhs.month << endl;
     if(this->month == rhs.month){
-      cout << this->day <<  "-- "<< rhs.day << endl;
       if(this->day == rhs.day){
         if(this->year == rhs.year)
           return true;
