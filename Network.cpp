@@ -7,24 +7,48 @@
 
 Network::Network(){
     // TODO
-    // What should be the initial values for head, tail, and count? 
+    // What should be the initial values for head, tail, and count?
+    head = NULL;
+    tail = NULL;
+    count = 0;
+
 }
 
 
 void Network::push_front(Person* newEntry){
     // TODO
     // Adds a new entry to the front of the LL (where head is pointing)
+    newEntry -> next = head;
+    newEntry -> prev = NULL;
+    if(head != NULL){
+      head -> prev = newEntry;
+    }
+    else{
+      tail = newEntry;
+    }
+    head = newEntry;
+    count++;
 }
 
 
 void Network::push_back(Person* newEntry){
     // TODO
     // Adds a new entry to the back of the LL (where tail is pointing)
+    newEntry -> next = NULL;
+    newEntry -> prev = tail;
+    if(tail != NULL){
+      tail -> next = newEntry;
+    }
+    else{
+      head = newEntry;
+    }
+    tail = newEntry;
+    count++;
 }
 
 
 void Network::printDB(){
-    // Already done! 
+    // Already done!
     cout << "Number of items: " << count << endl;
     cout << "------------------------------" << endl;
     Person* ptr = head;
@@ -36,8 +60,18 @@ void Network::printDB(){
 }
 
 Network::~Network(){
-    // TODO 
+    // TODO
     // Delete all the dynamically allocated items
+    Person* ptr;
+    ptr = head;
+    while(ptr != NULL){
+      ptr = head -> next;
+      delete head;
+      head = ptr;
+      count--;
+    }
+    delete head;
+    delete tail;
 }
 
 
@@ -46,7 +80,17 @@ Person* Network::search(Person* searchEntry){
     // Searches the Network to find an entry which has similar attributes as searchEntry
     // if found, returns a pointer to it, else returns NULL
     // Hint: We already implemented the == operator for two Person objects
-    // Note: searchEntry is not a Person, but a Person* 
+    // Note: searchEntry is not a Person, but a Person*
+    Person* searchPtr = head;
+    if(head != NULL){
+      while(searchPtr != NULL){
+        if((searchPtr -> f_name == searchEntry -> f_name)) && (searchPtr -> l_name == searchEntry -> l_name)){
+          return searchPtr;
+        }
+        searchPtr = searchPtr -> next;
+      }
+    }
+    return NULL;
 }
 
 
@@ -56,7 +100,9 @@ Person* Network::search(string fname, string lname, string bd){
     // if found, returns a pointer to it, else returns NULL
     // Note: two ways to implement this:
     // 1st) making a new Person with fname, lname, bdate and and using search(Person*)
-    // 2nd) using fname, lname, and bd directly 
+    // 2nd) using fname, lname, and bd directly
+    Person* x(fname,lname,bd);
+    return search(x);
 }
 
 
@@ -79,7 +125,8 @@ void Network::loadDB(string filename){
 
 Network::Network(string fileName){
     // TODO
-    // Hint: just call loadDB 
+    // Hint: just call loadDB
+    loadDB(filename);
 }
 
 
@@ -105,7 +152,7 @@ void Network::showMenu(){
         cout << "6. Print database \n";
         cout << "0. Quit \n";
         cout << "\nSelect an option ... ";
-        
+
         if (cin >> opt) {
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -119,16 +166,16 @@ void Network::showMenu(){
         string fname, lname, fileName, bdate;
         cout << "\033[2J\033[1;1H";
 
-        if (opt==1){ 
-            // Already done! 
+        if (opt==1){
+            // Already done!
             cout << "Saving network database \n";
             cout << "Enter the name of the save file: ";
             cin >> fileName;
             this->saveDB(fileName);
             cout << "Network saved in " << fileName << endl;
         }
-        else if (opt==2){ 
-            // Already done! 
+        else if (opt==2){
+            // Already done!
             cout << "Loading network database \n";
             // Note: we added a nice feature to show the files in current directory
             DIR *dir;
@@ -139,7 +186,7 @@ void Network::showMenu(){
                     str = ent->d_name;
                     if (str.size() > 3){
                         if (str.substr(str.size()-3) == ".db")
-                            cout << str << endl; 
+                            cout << str << endl;
                     }
                 }
                 closedir (dir);
@@ -161,11 +208,11 @@ void Network::showMenu(){
             // If it does not exist, push it to the front of the LL
             cout << "Adding a new item (push front)\n";
 
-            // If it already exists: 
+            // If it already exists:
             // cout << "Entity already exists\n"; -- not required in 2021
         }
         else if (opt == 4){
-            // TODO 
+            // TODO
             cout << "Removing an item \n";
             cout << "First name: ";
             cout << "Last name: ";
@@ -184,18 +231,18 @@ void Network::showMenu(){
         }
 
         else if (opt==6){
-            // TODO 
+            // TODO
             cout << "Network Database: \n";
-            // this should be simple ... 
+            // this should be simple ...
         }
 
         else if (opt==0)
-            // QUIT! 
+            // QUIT!
             return;
         else
             cout << "Nothing matched!\n";
-       
-        // Don't touch the lines below! :)  
+
+        // Don't touch the lines below! :)
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cin.clear();
         cout << "\n\nPress Enter key to go back to main menu ... ";
@@ -204,6 +251,3 @@ void Network::showMenu(){
         cout << "\033[2J\033[1;1H";
     }
 }
-
-
-

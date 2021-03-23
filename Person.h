@@ -9,12 +9,12 @@ class Person{
     friend class Network;
 
 private:
-	string f_name;  // can have space 
+	string f_name;  // can have space
 	string l_name;  // can have space
 	Date *birthdate;
-    // other attributes will be added later
 
-public: 
+    // other attributes will be added later
+public:
     Person();
     Person(string f_name, string l_name, string bdate);
     ~Person();
@@ -22,6 +22,8 @@ public:
 	void set_person();
     bool operator==(const Person& rhs);
     bool operator!=(const Person& rhs);
+    Person* next;
+    Person* prev;
 
 };
 
