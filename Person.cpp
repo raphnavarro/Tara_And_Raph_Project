@@ -48,9 +48,9 @@ bool Person::operator==(const Person& rhs){
     // TODO
     // Hint: Look at how we overloaded == in Date
     // Two persons are equal only if they have the same first name, last name and date of birth!
-    if(this->f_name == rhs.f_name){
-      if(this->l_name == rhs.l_name){
-        if(this->birthdate == rhs.birthdate)
+    if(f_name == rhs.f_name){
+      if(l_name == rhs.l_name){
+        if(birthdate->get_date() == rhs.birthdate->get_date())
           return true;
       }
     }
@@ -61,9 +61,9 @@ bool Person::operator==(const Person& rhs){
 bool Person::operator!=(const Person& rhs){
     // TODO
     // Hint: two things are either equal or not equal
-    if(this->f_name == rhs.f_name){
-      if(this->l_name == rhs.l_name){
-        if(this->birthdate == rhs.birthdate)
+    if(f_name == rhs.f_name){
+      if(l_name == rhs.l_name){
+        if(birthdate->get_date() == rhs.birthdate->get_date())
           return false;
       }
     }
