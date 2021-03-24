@@ -128,7 +128,30 @@ void Network::loadDB(string filename){
     // The format of the input file is similar to saveDB
     // Look at network studentDB.db as a template
     // When a new database is being loaded, you need to delete the previous dataset
-
+    Person* ptr = NULL;
+    Person* newPerson;
+    ptr = head;
+    while(ptr != NULL){
+      head = ptr;
+      delete head;
+      ptr = ptr -> next;
+    }
+    head = NULL;
+    tail = NULL;
+    count = 0;
+    string fname, lname, bdate, sectionBreak, firstLine;
+    ifstream inFile(filename);
+    if(inFile.is_open()){
+      while(getline(inFile, firstLine)){  //Gets contents of first line
+        fname = firstLine.substr(firstLine.find(',')+2);
+        lname = firstLine.substr(0,firstLine.find(','));
+      }
+      getline(inFile,bdate);
+      getline(inFile,sectionBreak);
+      newPerson = new Person(fname,lname,bdate);
+      this -> push_back(newPerson);
+    }
+    inFile.close();
 }
 
 
@@ -160,8 +183,6 @@ bool Network::remove(string fname, string lname, string bd){
     }
     return false;
 }
-
-
 
 void Network::showMenu(){
     int opt;
@@ -238,7 +259,7 @@ void Network::showMenu(){
             if(search(pers)){
               cout << "Entity already exists\n";
             }else{
-              push_front(pers)
+              push_front(pers);
             }
 
             // If it already exists:

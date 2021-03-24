@@ -10,8 +10,8 @@ class Network{
     private:
         Person* head;
         Person* tail;
-        int count; 
-        Person* search(Person* searchEntry); 
+        int count;
+        Person* search(Person* searchEntry);
         Person* search(string fname, string lname, string bd);
 
     public:
