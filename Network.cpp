@@ -84,7 +84,7 @@ Person* Network::search(Person* searchEntry){
     Person* searchPtr = head;
     if(head != NULL){
       while(searchPtr != NULL){
-        if((searchPtr -> f_name == searchEntry -> f_name)) && (searchPtr -> l_name == searchEntry -> l_name)){
+        if((searchPtr -> f_name == searchEntry -> f_name) && (searchPtr -> l_name == searchEntry -> l_name)){
           return searchPtr;
         }
         searchPtr = searchPtr -> next;
@@ -101,7 +101,8 @@ Person* Network::search(string fname, string lname, string bd){
     // Note: two ways to implement this:
     // 1st) making a new Person with fname, lname, bdate and and using search(Person*)
     // 2nd) using fname, lname, and bd directly
-    Person* x(fname,lname,bd);
+    Person a(fname,lname,bd);
+    Person* x = &a;
     return search(x);
 }
 
@@ -111,6 +112,13 @@ void Network::saveDB(string filename){
     // TODO
     // Saves the netwrok in file <filename>
     // Look at studentDB.db as a template of the format of our database files
+    ofstream outFile(filename);
+    Person* ptr = head;
+    while(ptr != NULL){
+        outFile << ptr->l_name <<", " << ptr->f_name << endl;
+        outFile << "------------------------------" << endl;
+        ptr = ptr->next;
+    }
 }
 
 
@@ -120,13 +128,14 @@ void Network::loadDB(string filename){
     // The format of the input file is similar to saveDB
     // Look at network studentDB.db as a template
     // When a new database is being loaded, you need to delete the previous dataset
+
 }
 
 
 Network::Network(string fileName){
     // TODO
     // Hint: just call loadDB
-    loadDB(filename);
+    loadDB(fileName);
 }
 
 
@@ -134,6 +143,22 @@ bool Network::remove(string fname, string lname, string bd){
     // TODO
     // remove the entry with matching fname, lname, bd
     // If it exists, returns true, otherwise, returns false
+
+    Person* x = search(fname,lname,bd);
+    if(x!=NULL){
+      if (x->next == NULL){
+        free(x);
+      }else{
+        Person* temp = x->next;
+        x->f_name = temp->f_name;
+        x->l_name = temp->l_name;
+        x->birthdate = temp->birthdate;
+        x->next = temp->next;
+        free(temp);
+      }
+      return true;
+    }
+    return false;
 }
 
 
@@ -207,6 +232,14 @@ void Network::showMenu(){
             // You need to make sure this item does not already exists!
             // If it does not exist, push it to the front of the LL
             cout << "Adding a new item (push front)\n";
+            cin >> fname >> lname >> bdate;
+            Person per(fname, lname, bdate);
+            Person* pers = &per;
+            if(search(pers)){
+              cout << "Entity already exists\n";
+            }else{
+              push_front(pers)
+            }
 
             // If it already exists:
             // cout << "Entity already exists\n"; -- not required in 2021
@@ -215,8 +248,16 @@ void Network::showMenu(){
             // TODO
             cout << "Removing an item \n";
             cout << "First name: ";
+            cin >> fname;
             cout << "Last name: ";
+            cin >> lname;
             cout << "Birthdate: ";
+            cin >> bdate;
+            if(remove(fname, lname, bdate)){
+              cout << "Remove Successful! \n";
+            }else{
+              cout << "Person not found! \n";
+            }
             // If found and removed successfully: cout << "Remove Successful! \n";
             // else: cout << "Person not found! \n";
         }
@@ -224,8 +265,16 @@ void Network::showMenu(){
             // TODO
             cout << "Searching: \n";
             cout << "First Name: ";
+            cin >> fname;
             cout << "Last Name: ";
+            cin >> lname;
             cout << "Birthdate: ";
+            cin >> bdate;
+            if(search(fname, lname, bdate)!=NULL){
+              cout << search(fname, lname, bdate);
+            }else{
+              cout << "Not found! \n";
+            }
             // If not found: cout << "Not found! \n";
             // If found: print person
         }
@@ -234,6 +283,7 @@ void Network::showMenu(){
             // TODO
             cout << "Network Database: \n";
             // this should be simple ...
+            printDB();
         }
 
         else if (opt==0)
