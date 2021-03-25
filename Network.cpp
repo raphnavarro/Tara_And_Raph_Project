@@ -116,6 +116,7 @@ void Network::saveDB(string filename){
     Person* ptr = head;
     while(ptr != NULL){
         outFile << ptr->l_name <<", " << ptr->f_name << endl;
+        outFile << ptr -> birthdate -> get_date() << endl;
         outFile << "------------------------------" << endl;
         ptr = ptr->next;
     }
@@ -179,6 +180,7 @@ bool Network::remove(string fname, string lname, string bd){
         x->next = temp->next;
         free(temp);
       }
+      count--;
       return true;
     }
     return false;
@@ -252,14 +254,24 @@ void Network::showMenu(){
             // Prompt and get the information of a new Person
             // You need to make sure this item does not already exists!
             // If it does not exist, push it to the front of the LL
-            cout << "Adding a new item (push front)\n";
-            cin >> fname >> lname >> bdate;
-            Person per(fname, lname, bdate);
-            Person* pers = &per;
-            if(search(pers)){
+            // cout << "Adding a new item (push front)\n";
+            // cout << "Input first name: ";
+            // cin >> fname;
+            // cout << "Input last name: ";
+            // cin >> lname;
+            // cout << "Input birthdate: ";
+            // cin >> bdate;
+            // Person per(fname, lname, bdate);
+            // Person* pers = &per;
+            Person* newItem = new Person();
+            string lname, fname, bdate;
+            lname = newItem -> l_name;
+            fname = newItem -> f_name;
+            bdate = newItem -> birthdate -> get_date();
+            if(search(lname,fname,bdate) != NULL){
               cout << "Entity already exists\n";
             }else{
-              push_front(pers);
+              push_front(newItem);
             }
 
             // If it already exists:
@@ -292,7 +304,7 @@ void Network::showMenu(){
             cout << "Birthdate: ";
             cin >> bdate;
             if(search(fname, lname, bdate)!=NULL){
-              cout << search(fname, lname, bdate);
+              search(fname,lname,bdate) -> print_person();
             }else{
               cout << "Not found! \n";
             }
