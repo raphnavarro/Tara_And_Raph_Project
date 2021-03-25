@@ -32,8 +32,8 @@ string Email::get_contact(){
 void Email::print(){
     // TODO
     // Hint: use get_contact
-    string str = get_contact();
-    cout << str << endl;
+    string str = get_contact(); //combine the type of email and the email in one string
+    cout << str << endl; //cout the combined string
 }
 
 
@@ -62,8 +62,8 @@ string Phone::get_contact(){
     // TODO
     // return example "(Cell) 213-876-0023"
     set_contact();
-    if(num.length()==10){
-      num.insert(3,"-");
+    if(num.length()==10){//since we know all numbers are 10 digits long, we can check to see if there are hyphens by looking at the length of the string
+      num.insert(3,"-"); //add hyphens in correct spots
       num.insert(7,"-");
     }
     string str = "(" + type + ") " + num;
@@ -74,6 +74,7 @@ string Phone::get_contact(){
 void Phone::print(){
     // TODO
     // Hint: use get_contact
+    //same logic as print for email, but for phone
     string str = get_contact();
     cout << str << endl;
 }

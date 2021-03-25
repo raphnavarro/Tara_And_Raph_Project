@@ -10,7 +10,7 @@ Network::Network(){
     // What should be the initial values for head, tail, and count?
     head = NULL;
     tail = NULL;
-    count = 0;
+    count = 0; //no one in the db
 
 }
 
@@ -19,31 +19,31 @@ void Network::push_front(Person* newEntry){
     // TODO
     // Adds a new entry to the front of the LL (where head is pointing)
     newEntry -> next = head;
-    newEntry -> prev = NULL;
-    if(head != NULL){
+    newEntry -> prev = NULL; //nothing before head
+    if(head != NULL){ //if there is already other entries
       head -> prev = newEntry;
     }
     else{
       tail = newEntry;
     }
     head = newEntry;
-    count++;
+    count++; //increment for new person
 }
 
 
 void Network::push_back(Person* newEntry){
     // TODO
     // Adds a new entry to the back of the LL (where tail is pointing)
-    newEntry -> next = NULL;
+    newEntry -> next = NULL; //nothing after tail
     newEntry -> prev = tail;
-    if(tail != NULL){
+    if(tail != NULL){ //if there is already other entries
       tail -> next = newEntry;
     }
     else{
       head = newEntry;
     }
     tail = newEntry;
-    count++;
+    count++; //increment for new person
 }
 
 
@@ -64,11 +64,11 @@ Network::~Network(){
     // Delete all the dynamically allocated items
     Person* ptr;
     ptr = head;
-    while(ptr != NULL){
-      ptr = head -> next;
-      delete head;
-      head = ptr;
-      count--;
+    while(ptr != NULL){ //go through and delete all entries
+      ptr = head -> next; //the node after head
+      delete head; //delete current head
+      head = ptr; //make ptr the new head
+      count--; //decrement
     }
     delete head;
     delete tail;
@@ -82,10 +82,14 @@ Person* Network::search(Person* searchEntry){
     // Hint: We already implemented the == operator for two Person objects
     // Note: searchEntry is not a Person, but a Person*
     Person* searchPtr = head;
-    if(head != NULL){
-      while(searchPtr != NULL){
-        if((searchPtr -> f_name == searchEntry -> f_name) && (searchPtr -> l_name == searchEntry -> l_name)){
-          return searchPtr;
+    if(head != NULL){ //make sure there are people in the network
+      while(searchPtr != NULL){//as long as we havent reached the end of the list
+        if(searchPtr -> f_name == searchEntry -> f_name){
+          if(searchPtr -> l_name == searchEntry -> l_name){
+            if(searchPtr -> birthdate -> get_date() == searchEntry -> birthdate -> get_date()){
+              return searchPtr; //return searchPtr if first name, last name, and birthdate are the same
+            }
+          }
         }
         searchPtr = searchPtr -> next;
       }
@@ -101,9 +105,9 @@ Person* Network::search(string fname, string lname, string bd){
     // Note: two ways to implement this:
     // 1st) making a new Person with fname, lname, bdate and and using search(Person*)
     // 2nd) using fname, lname, and bd directly
-    Person a(fname,lname,bd);
-    Person* x = &a;
-    return search(x);
+    Person a(fname,lname,bd); //create a new person
+    Person* x = &a; //create a pointer to point to that person
+    return search(x); //call other search function
 }
 
 
@@ -113,12 +117,12 @@ void Network::saveDB(string filename){
     // Saves the netwrok in file <filename>
     // Look at studentDB.db as a template of the format of our database files
     ofstream outFile(filename);
-    Person* ptr = head;
-    while(ptr != NULL){
+    Person* ptr = head; //start at head
+    while(ptr != NULL){ //as long as we havent reached the end, keep outputting
         outFile << ptr->l_name <<", " << ptr->f_name << endl;
         outFile << ptr -> birthdate -> get_date() << endl;
         outFile << "------------------------------" << endl;
-        ptr = ptr->next;
+        ptr = ptr->next; // go to next entry
     }
 }
 
@@ -132,7 +136,7 @@ void Network::loadDB(string filename){
     Person* ptr = NULL;
     Person* newPerson;
     ptr = head;
-    while(ptr != NULL){
+    while(ptr != NULL){ //delete old database
       head = ptr;
       delete head;
       ptr = ptr -> next;
@@ -143,14 +147,14 @@ void Network::loadDB(string filename){
     int index = 0;
     string fname, lname, bdate, sectionBreak, firstLine;
     ifstream inFile(filename);
-    while(getline(inFile, firstLine)){  //Gets contents of first line
-      index = firstLine.find(",");
-      fname = firstLine.substr(index+2);
-      lname = firstLine.substr(0,index);
+    while(getline(inFile, firstLine)){ //take in the name (last, first)
+      index = firstLine.find(","); //find comma
+      fname = firstLine.substr(index+2); //first name starts after the comma and space and goes to the end of the string
+      lname = firstLine.substr(0,index); // last name goes from the beginning to the comma
       getline(inFile,bdate);
       getline(inFile,sectionBreak);
       newPerson = new Person(fname,lname,bdate);
-      this -> push_back(newPerson);
+      this -> push_back(newPerson); //add person to end of database
     }
 
     inFile.close();
@@ -169,29 +173,21 @@ bool Network::remove(string fname, string lname, string bd){
     // remove the entry with matching fname, lname, bd
     // If it exists, returns true, otherwise, returns false
 
-    Person* x = search(fname,lname,bd);
+    Person* x = search(fname,lname,bd); //make sure person exists
     if(x!=NULL){
-      if (x->next == NULL){
-        // x->f_name = NULL;
-        // x->l_name = NULL;
-        // x->birthdate = NULL;
-        x = NULL;
+      if (x->next == NULL){//if it is the tail
+        free(x); //delete
 
       }else{
-        Person* temp = x->next;
-        x->f_name = temp->f_name;
-        x->l_name = temp->l_name;
-        x->birthdate = temp->birthdate;
-        x->next = temp->next;
-        temp = NULL;
-        // temp -> f_name = NULL;
-        // temp -> l_name = NULL;
-        // temp -> birthdate = NULL;
+        Person* temp = x->next; //make temp point to the next entry
+        x->next = temp->next->next;
+        x = temp;
+        free(temp); //delete
       }
-      count--;
+      count--; //decrement
       return true;
     }
-    return false;
+    return false; //return false if person doesnt exist
 }
 
 void Network::showMenu(){
@@ -271,12 +267,13 @@ void Network::showMenu(){
             // cin >> bdate;
             // Person per(fname, lname, bdate);
             // Person* pers = &per;
-            Person* newItem = new Person();
+            Person* newItem = new Person(); //make a new person
             string lname, fname, bdate;
+            //take in attributes
             lname = newItem -> l_name;
             fname = newItem -> f_name;
             bdate = newItem -> birthdate -> get_date();
-            if(search(lname,fname,bdate) != NULL){
+            if(search(lname,fname,bdate) != NULL){ //make sure not getting a repeat
               cout << "Entity already exists\n";
             }else{
               push_front(newItem);
@@ -294,7 +291,7 @@ void Network::showMenu(){
             cin >> lname;
             cout << "Birthdate: ";
             cin >> bdate;
-            if(remove(fname, lname, bdate)){
+            if(remove(fname, lname, bdate)){ //call remove function, if true then output success
               cout << "Remove Successful! \n";
             }else{
               cout << "Person not found! \n";
@@ -311,7 +308,7 @@ void Network::showMenu(){
             cin >> lname;
             cout << "Birthdate: ";
             cin >> bdate;
-            if(search(fname, lname, bdate)!=NULL){
+            if(search(fname, lname, bdate)!=NULL){ //if person found, print the person
               search(fname,lname,bdate) -> print_person();
             }else{
               cout << "Not found! \n";

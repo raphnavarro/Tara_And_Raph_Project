@@ -10,6 +10,7 @@ using namespace std;
 
 
 class ContactInfo {
+    //protected so email and phone can see it
     protected: //TODO: should type be private or protected?	Think about it.
 	string type;
 public:

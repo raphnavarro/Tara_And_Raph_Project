@@ -27,9 +27,9 @@ Date::Date(string str){
 
 bool Date::operator==(const Date& rhs){
     // TODO
-    if(this->month == rhs.month){
-      if(this->day == rhs.day){
-        if(this->year == rhs.year)
+    if(this->month == rhs.month){ //if the month is the same
+      if(this->day == rhs.day){ // if the day is the same
+        if(this->year == rhs.year)//if the year is the same
           return true;
       }
     }
@@ -39,6 +39,7 @@ bool Date::operator==(const Date& rhs){
 
 bool Date::operator!=(const Date& rhs){
     // TODO
+    //same logic as the == operator, but returns false if month, day, and year are the same
     if(this->month == rhs.month){
       if(this->day == rhs.day){
         if(this->year == rhs.year)
@@ -50,13 +51,13 @@ bool Date::operator!=(const Date& rhs){
 
 bool Date::operator < (const Date& rhs){
     // TODO
-    if(this->year < rhs.year)
+    if(this->year < rhs.year) // if the year is earlier
       return true;
     else if(this->year == rhs.year){
-      if(this->month < rhs.year)
+      if(this->month < rhs.year) //if the year is the same but the month is earlier
         return true;
     }else if(this->month == rhs.month){
-      if(this->day < rhs.day)
+      if(this->day < rhs.day) //if the month and year are the same but the day is earlier
         return true;
     }
     return false;
@@ -64,6 +65,7 @@ bool Date::operator < (const Date& rhs){
 
 bool Date::operator > (const Date& rhs){
     // TODO
+    //same logic as the < operator, but using > instead
     if(this->year > rhs.year)
       return true;
     else if(this->year == rhs.year){
@@ -79,6 +81,7 @@ bool Date::operator > (const Date& rhs){
 bool Date::check_date(int _day, int _month, int _year){
     // TODO -- you did this in Lab3
     // Leap years are those years divisible by 4, except for century years which are not divisible by 400.
+    //copied from lab 3
     int y = year%4;
     int x = year%400;
     int z = year%100;
@@ -117,17 +120,15 @@ bool Date::set_date(string str){
     string month = "";
     string day = "";
     string year = "";
-    int index1 = str.find("/");
+    int index1 = str.find("/"); // the index of the first "/"
 
-    month = str.substr(0,index1);
-    index1++; //go past first slash
-    str = str.substr(index1,str.length()-index1);
-    int index2 = str.find("/");
-    day = str.substr(0, index2);
-    index2++;
-    year = str.substr(index2, str.length());
-
-    //cout << month << "/" << day << "/" << year << endl;
+    month = str.substr(0,index1); // the month will be from the beginning of the string to index1
+    index1++; //iterate over the slash since we don't want it in our day
+    str = str.substr(index1,str.length()-index1); //get rid of the month and the first slash since we already inputted month. We only need to look at day and year now
+    int index2 = str.find("/"); // finding the slash between day and year
+    day = str.substr(0, index2); // the day will be from the beginning of the string to index2
+    index2++; // iterate over the slash since we dont want it in our year
+    year = str.substr(index2, str.length()); //year is the rest of the string
     return set_date(stoi(day), stoi(month), stoi(year));
 }
 
@@ -162,7 +163,7 @@ void Date::print_date(string type){
     // otherwise, cout << "Wrong print type!" << endl;
     if(type=="M/D/YYYY"){
       cout << month << "/" << day << "/" << year << endl;
-    }else if(type == "Month D, YYYY"){
+    }else if(type == "Month D, YYYY"){//taken from lab3
       enum monthnum{Jan = 1, Feb=2, Mar=3, Apr=4, May=5, Jun=6, Jul=7, Aug=8, Sep=9, Oct=10, Nov=11, Dec=12};
       switch(month){
         case Jan:

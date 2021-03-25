@@ -38,7 +38,7 @@ void Person::set_person(){
     cout << "Birthdate (M/D/YYYY): ";
     string s;
     cin >> s;
-    birthdate = new Date(s);
+    birthdate = new Date(s); //create a new date using the string
     // TODO: get birthdate from user as a string and use it to create a new Date (dynamic allocation)
 
 }
@@ -48,9 +48,9 @@ bool Person::operator==(const Person& rhs){
     // TODO
     // Hint: Look at how we overloaded == in Date
     // Two persons are equal only if they have the same first name, last name and date of birth!
-    if(f_name == rhs.f_name){
-      if(l_name == rhs.l_name){
-        if(birthdate->get_date() == rhs.birthdate->get_date())
+    if(f_name == rhs.f_name){ //if first names are the same
+      if(l_name == rhs.l_name){ //if last names are the same
+        if(birthdate->get_date() == rhs.birthdate->get_date()) //if birthdays are the same
           return true;
       }
     }
@@ -61,6 +61,7 @@ bool Person::operator==(const Person& rhs){
 bool Person::operator!=(const Person& rhs){
     // TODO
     // Hint: two things are either equal or not equal
+    //same logic as == operator but return false if first name, last name, and birthday are the same
     if(f_name == rhs.f_name){
       if(l_name == rhs.l_name){
         if(birthdate->get_date() == rhs.birthdate->get_date())
