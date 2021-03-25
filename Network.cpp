@@ -140,18 +140,19 @@ void Network::loadDB(string filename){
     head = NULL;
     tail = NULL;
     count = 0;
+    int index = 0;
     string fname, lname, bdate, sectionBreak, firstLine;
     ifstream inFile(filename);
-    if(inFile.is_open()){
-      while(getline(inFile, firstLine)){  //Gets contents of first line
-        fname = firstLine.substr(firstLine.find(',')+2);
-        lname = firstLine.substr(0,firstLine.find(','));
-      }
+    while(getline(inFile, firstLine)){  //Gets contents of first line
+      index = firstLine.find(",");
+      fname = firstLine.substr(index+2);
+      lname = firstLine.substr(0,index);
       getline(inFile,bdate);
       getline(inFile,sectionBreak);
       newPerson = new Person(fname,lname,bdate);
       this -> push_back(newPerson);
     }
+
     inFile.close();
 }
 
@@ -171,14 +172,21 @@ bool Network::remove(string fname, string lname, string bd){
     Person* x = search(fname,lname,bd);
     if(x!=NULL){
       if (x->next == NULL){
-        free(x);
+        // x->f_name = NULL;
+        // x->l_name = NULL;
+        // x->birthdate = NULL;
+        x = NULL;
+
       }else{
         Person* temp = x->next;
         x->f_name = temp->f_name;
         x->l_name = temp->l_name;
         x->birthdate = temp->birthdate;
         x->next = temp->next;
-        free(temp);
+        temp = NULL;
+        // temp -> f_name = NULL;
+        // temp -> l_name = NULL;
+        // temp -> birthdate = NULL;
       }
       count--;
       return true;
